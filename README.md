@@ -16,14 +16,12 @@ git clone https://github.com/KC3PIB/WsjtxUtils.Searchlight
 
 cd WsjtxUtils.Searchlight
 
-dotnet restore WsjtxUtils.Searchlight.sln
+dotnet publish -c release .\WsjtxUtils.Searchlight.sln
 
-dotnet build WsjtxUtils.Searchlight.sln
+cd src\WsjtxUtils.Searchlight.Console\bin\Release\net6.0\publish\
 
-cd src/WsjtxUtils.Searchlight.Console/
-
-dotnet run WsjtxUtils.Searchlight.Console.csproj
-```
+WsjtxUtils.Searchlight.Console.exe
+ ```
 ## Configuration
 Options can be configured via the [config.json](https://github.com/KC3PIB/WsjtxUtils.Searchlight/blob/development/src/WsjtxUtils.Searchlight.Console/config.json) file or command-line parameters. These options include WSJT-X server IP address and port, the colors used for highlighted callsigns, reception report window and request period, and logging options.
 ```json
