@@ -8,7 +8,7 @@ This application will download reception reports from PSK Reporter for the calls
 
 ## Requirements
 - [.NET 6 SDK](https://docs.microsoft.com/en-us/dotnet/core/install/)
--- Installation instruction for [Windows](ttps://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=net60), [Mac](https://docs.microsoft.com/en-us/dotnet/core/install/macos), [Linux](https://docs.microsoft.com/en-us/dotnet/core/install/linux)
+    - Installation instruction for [Windows](https://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=net60), [Mac](https://docs.microsoft.com/en-us/dotnet/core/install/macos), [Linux](https://docs.microsoft.com/en-us/dotnet/core/install/linux)
 
 ## Quickstart
 ```sh
