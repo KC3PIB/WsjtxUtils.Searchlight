@@ -11,7 +11,7 @@
   },
   "PskReporter": {
     "ReportWindowSeconds": -900,
-    "ReportRetrievalPeriodSeconds": 120
+    "ReportRetrievalPeriodSeconds": 500
   },
   "Serilog": {
     "MinimumLevel": "Information",
