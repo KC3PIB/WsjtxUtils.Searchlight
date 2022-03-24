@@ -25,7 +25,7 @@ WsjtxUtils.Searchlight.Console.exe
 ## Configuration
 Options can be configured via the [config.json](https://github.com/KC3PIB/WsjtxUtils.Searchlight/blob/development/src/WsjtxUtils.Searchlight.Console/config.json) file or command-line parameters. These options include WSJT-X server IP address and port, the colors used for highlighted callsigns, reception report window and request period, and logging options.
 
-> **NOTE:** To use other 3rd party software (e.g. GridTracker) and searchlight together, you must configure WSJT-X, searchlight, and the 3rd party software to use a multicast IP address like 224.0.0.1.
+> **NOTE:** To use other 3rd party software (e.g. [GridTracker](https://gridtracker.org/grid-tracker/)) and searchlight together, you must configure WSJT-X, searchlight, and the 3rd party software to use a multicast IP address like 224.0.0.1.
 
 ```json
 {
