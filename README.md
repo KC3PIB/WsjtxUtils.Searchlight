@@ -6,6 +6,8 @@ WjtxUtils.Searchlight will download reception reports from PSK Reporter for the 
 
 When a logged QSO occurs, that callsign will be highlighted for the duration of the application. There is no persistence of logged QSOs, and all highlights are cleared on application exit.
 
+There is a countdown period when the application starts until requesting the first reception report, which defaults to 5 minutes. This period is an excellent time to call CQ for a while to seed the initial reception report.
+
 > **NOTE:** To use 3rd party software ([GridTracker](https://gridtracker.org/grid-tracker/)) or multiple WSJT-X instances (SO2R), you must configure WSJT-X, searchlight, and any 3rd party software to use a [multicast address](https://en.wikipedia.org/wiki/Multicast_address).
 
 ## Requirements
