@@ -20,6 +20,9 @@ jobs:
             os: macos-latest
             target: osx-x64
     runs-on: ${{ matrix.os }}
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
 
     steps:
       - name: Checkout searchlight
@@ -28,7 +31,9 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.X'
+          dotnet-version: '6.0.x'
+          include-prerelease: true
+
       - name: Build searchlight
         shell: bash
         run: |
