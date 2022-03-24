@@ -7,21 +7,29 @@ This application will download reception reports from PSK Reporter for the calls
 > **NOTE:** This software is currently in a pre-release alpha state.
 
 ## Requirements
+For pre-compiled [releases](https://github.com/KC3PIB/WsjtxUtils.Searchlight/releases):
+- [.NET 6 Runtime](https://docs.microsoft.com/en-us/dotnet/core/install/)
+    - Installation instruction for [Windows](https://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=net60), [Mac](https://docs.microsoft.com/en-us/dotnet/core/install/macos), [Linux](https://docs.microsoft.com/en-us/dotnet/core/install/linux)
+
+To compile from source:
 - [.NET 6 SDK](https://docs.microsoft.com/en-us/dotnet/core/install/)
     - Installation instruction for [Windows](https://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=net60), [Mac](https://docs.microsoft.com/en-us/dotnet/core/install/macos), [Linux](https://docs.microsoft.com/en-us/dotnet/core/install/linux)
 
 ## Quickstart
-```sh
-git clone https://github.com/KC3PIB/WsjtxUtils.Searchlight
+For pre-compiled [releases](https://github.com/KC3PIB/WsjtxUtils.Searchlight/releases) (win-x64, linux-x64, osx-x64):
+- Ensure that you have the .NET 6 runtime installed
+- Download the package for your OS
+- Extract the archive to your desired location
+- Run the executable file
+    - Windows ```WjtxUtils.Searchlight.Console.exe```
+    - Linux & OSX ```WsjtxUtils.Searchlight.Console```
+- Edit the config.json file to customize available options
 
-cd WsjtxUtils.Searchlight
+To compile from source:
+- Ensure that you have the .NET 6 SDK installed
+- Clone or download the source code
+- ```dotnet publish -c release src/WsjtxUtils.Searchlight.Console/WsjtxUtils.Searchlight.Console.csproj --output <OUTPUT_DIRECTORY>```
 
-dotnet publish -c release .\WsjtxUtils.Searchlight.sln
-
-cd src\WsjtxUtils.Searchlight.Console\bin\Release\net6.0\publish\
-
-WsjtxUtils.Searchlight.Console.exe
- ```
 ## Configuration
 Options can be configured via the [config.json](https://github.com/KC3PIB/WsjtxUtils.Searchlight/blob/development/src/WsjtxUtils.Searchlight.Console/config.json) file or command-line parameters. These options include WSJT-X server IP address and port, the colors used for highlighted callsigns, reception report window and request period, and logging options.
 
