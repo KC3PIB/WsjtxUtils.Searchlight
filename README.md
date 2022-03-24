@@ -34,27 +34,41 @@ To compile from source:
 - ```dotnet publish -c release src/WsjtxUtils.Searchlight.Console/WsjtxUtils.Searchlight.Console.csproj --output <OUTPUT_DIRECTORY>```
 
 ## Configuration
-Options can be configured via the [config.json](https://github.com/KC3PIB/WsjtxUtils.Searchlight/blob/development/src/WsjtxUtils.Searchlight.Console/config.json) file or command-line parameters. These options include WSJT-X server IP address and port, the colors used for highlighted callsigns, reception report window and request period, and logging options.
+Options can be configured by editing the [config.json](https://github.com/KC3PIB/WsjtxUtils.Searchlight/blob/development/src/WsjtxUtils.Searchlight.Console/config.json) file or by overriding specific parameters by command-line. These options include WSJT-X server IP address and port, the colors used for highlighted callsigns, reception report window/request period, and logging options.
 
-
-
+To change the UDP server IP Address or port to listen for messages from WSJT-X
 ```json
-{
-  "Server": {
+"Server": {
     "Address": "127.0.0.1",
     "Port": 2237
-  },
-  "Palette": {
+  }
+```
+To use 3rd party software ([GridTracker](https://gridtracker.org/grid-tracker/)) or operate more than one WSJT-X instance (SO2R) use a [multicast address](https://en.wikipedia.org/wiki/Multicast_address).
+```json
+"Server": {
+    "Address": "224.0.0.1",
+    "Port": 2237
+  }
+```
+The color options used for reception reports and logged QSOs are altered through the Palette section. ```ReceptionReportBackgroundColors``` is a list of colors, [a gradient](https://colordesigner.io/gradient-generator), used as the background color for reception reports. The first color in the list represents the weakest SNR report values and the last the strongest SNR values. ```ReceptionReportForegroundColor``` controls the color used for highlighted text (callsigns). Both ```ContactedBackgroundColor``` and ```ContactedForegroundColor``` are used for logged QSOs.
+```json
+"Palette": {
     "ReceptionReportBackgroundColors": [ "#114397", "#453f99", "#653897", "#812e91", "#991f87", "#ae027a", "#be006a", "#cb0058", "#d30044", "#d7002e" ],
     "ReceptionReportForegroundColor": "#ffff00",
     "ContactedBackgroundColor": "#000000",
     "ContactedForegroundColor": "#ffff00"
-  },
-  "PskReporter": {
+  }
+```
+Reception report options are altered through the ```PskReporter``` section. ```ReportWindowSeconds``` is a negative number in seconds to indicate how much data to retrieve. This value cannot be more than 24 hours and defaults to -900 seconds or the previous 15 minutes, which should be enough data for current band conditions. ```ReportRetrievalPeriodSeconds``` controls how often reception reports are retrieved. Phil from [PSK Reporter](https://pskreporter.info/) has asked to limit requests to once every five minutes. IMHO Phil does a considerable service to the ham radio community with this data, don't abuse it.
+```json
+"PskReporter": {
     "ReportWindowSeconds": -900,
     "ReportRetrievalPeriodSeconds": 500
-  },
-  "Serilog": {
+  }
+```
+Console and file logging output is controlled through the ```Serilog``` section. Please see the [Serilog documentation](https://github.com/serilog/serilog-settings-configuration) for details.
+```json
+"Serilog": {
     "MinimumLevel": "Information",
     "WriteTo": [
       {
@@ -74,5 +88,4 @@ Options can be configured via the [config.json](https://github.com/KC3PIB/WsjtxU
       }
     ]
   }
-}
 ```
