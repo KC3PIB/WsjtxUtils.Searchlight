@@ -63,7 +63,7 @@ Reception report options are altered through the ```PskReporter``` section. ```R
 ```json
 "PskReporter": {
     "ReportWindowSeconds": -900,
-    "ReportRetrievalPeriodSeconds": 500
+    "ReportRetrievalPeriodSeconds": 300
   }
 ```
 Console and file logging output is controlled through the ```Serilog``` section. Please see the [Serilog documentation](https://github.com/serilog/serilog-settings-configuration) for details.
