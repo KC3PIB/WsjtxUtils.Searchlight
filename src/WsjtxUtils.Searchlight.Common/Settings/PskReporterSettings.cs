@@ -7,6 +7,8 @@ namespace WsjtxUtils.Searchlight.Common.Settings
     /// </summary>
     public class PskReporterSettings
     {
+        const int RetrievalPeriodWarnLimit = 300;
+
         private int _reportRetrievalPeriodSeconds;
 
         /// <summary>
@@ -24,8 +26,8 @@ namespace WsjtxUtils.Searchlight.Common.Settings
         {
             get => _reportRetrievalPeriodSeconds; set
             {
-                if (value < 300)
-                    Log.Warning("The current PskReporterSettings.ReportRetrievalPeriodSeconds value of {value} is less than 300 seconds, is not recommended, and will likely result in the requests being rejected for abuse. Phil, of PSK Reporter, has created a service of enormous importance to the amateur radio community, don't be a lid", value);
+                if (value < RetrievalPeriodWarnLimit)
+                    Log.Warning("The current PskReporterSettings.ReportRetrievalPeriodSeconds value of {value} is less than {limit} seconds, is not recommended, and will likely result in the requests being rejected for abuse. Philip does a considerable service to the ham radio community with this data, don't be a lid", value, RetrievalPeriodWarnLimit);
                 _reportRetrievalPeriodSeconds = value;
             }
         }
