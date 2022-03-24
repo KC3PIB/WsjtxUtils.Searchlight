@@ -61,7 +61,7 @@ The color options used for reception reports and logged QSOs are altered through
     "ContactedForegroundColor": "#ffff00"
   }
 ```
-Reception report options are altered through the ```PskReporter``` section. ```ReportWindowSeconds``` is a negative number in seconds to indicate how much data to retrieve. This value cannot be more than 24 hours and defaults to -900 seconds or the previous 15 minutes, which should be enough data for current band conditions. ```ReportRetrievalPeriodSeconds``` controls how often reception reports are retrieved. Phil from [PSK Reporter](https://pskreporter.info/) has asked to limit requests to once every five minutes. IMHO Phil does a considerable service to the ham radio community with this data, don't abuse it.
+Reception report options are altered through the ```PskReporter``` section. ```ReportWindowSeconds``` is a negative number in seconds to indicate how much data to retrieve. This value cannot be more than 24 hours and defaults to -900 seconds or the previous 15 minutes, which should be enough data for current band conditions. ```ReportRetrievalPeriodSeconds``` controls how often reception reports are retrieved. Philip from [PSK Reporter](https://pskreporter.info/) has asked to limit requests to once every five minutes. IMHO Philip does a considerable service to the ham radio community with this data, don't abuse it.
 ```json
 "PskReporter": {
     "ReportWindowSeconds": -900,
