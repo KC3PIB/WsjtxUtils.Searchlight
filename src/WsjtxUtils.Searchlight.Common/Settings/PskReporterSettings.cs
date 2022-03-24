@@ -24,8 +24,8 @@ namespace WsjtxUtils.Searchlight.Common.Settings
         {
             get => _reportRetrievalPeriodSeconds; set
             {
-                if (value < 500)
-                    Log.Warning("The current PskReporterSettings.ReportRetrievalPeriodSeconds value of {value} is less than 500 seconds, is not recommended, and will likely result in the requests being rejected for abuse. Phil, of PSK Reporter, has created a service of enormous importance to the amateur radio community, don't be a lid", value);
+                if (value < 300)
+                    Log.Warning("The current PskReporterSettings.ReportRetrievalPeriodSeconds value of {value} is less than 300 seconds, is not recommended, and will likely result in the requests being rejected for abuse. Phil, of PSK Reporter, has created a service of enormous importance to the amateur radio community, don't be a lid", value);
                 _reportRetrievalPeriodSeconds = value;
             }
         }
