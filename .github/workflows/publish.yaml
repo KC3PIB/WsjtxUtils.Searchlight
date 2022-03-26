@@ -21,7 +21,7 @@ jobs:
             target: osx-x64
           - kind: arm64
             os: self-hosted
-            target: arm64
+            target: linux-arm64
     runs-on: ${{ matrix.os }}
     env:
       DOTNET_NOLOGO: true
