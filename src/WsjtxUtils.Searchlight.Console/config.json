@@ -7,11 +7,16 @@
     "ReceptionReportBackgroundColors": [ "#114397", "#453f99", "#653897", "#812e91", "#991f87", "#ae027a", "#be006a", "#cb0058", "#d30044", "#d7002e" ],
     "ReceptionReportForegroundColor": "#ffff00",
     "ContactedBackgroundColor": "#000000",
-    "ContactedForegroundColor": "#ffff00"
+    "ContactedForegroundColor": "#ffff00",
+    "HighlightCallsignsPeriodSeconds": 5
   },
   "PskReporter": {
     "ReportWindowSeconds": -900,
     "ReportRetrievalPeriodSeconds": 300
+  },
+  "LoggedQsos": {
+    "LogFilePath": "searchlight-qso.log",
+    "QsoManagerBehavior": "OncePerBand"
   },
   "Serilog": {
     "MinimumLevel": "Information",
@@ -20,14 +25,6 @@
         "Name": "Console",
         "Args": {
           "theme": "Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme::Code, Serilog.Sinks.Console",
-          "outputTemplate": "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {NewLine}{Exception}"
-        }
-      },
-      {
-        "Name": "File",
-        "Args": {
-          "path": "searchlight-log.txt",
-          "rollingInterval": "Day",
           "outputTemplate": "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {NewLine}{Exception}"
         }
       }

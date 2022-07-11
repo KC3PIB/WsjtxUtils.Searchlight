@@ -11,6 +11,8 @@ namespace WsjtxUtils.Searchlight.Common
         private const int ExponentialBackoffSeconds = 30;
         private const int MaxRetries = 3;
 
+        private readonly SemaphoreSlim _reportRequestSemaphore = new SemaphoreSlim(1, 1);
+
         /// <summary>
         /// Global dictionary for reception reports keyed by DE callsign
         /// </summary>
@@ -36,7 +38,7 @@ namespace WsjtxUtils.Searchlight.Common
         /// <param name="callsign"></param>
         /// <param name="receptionReportState"></param>
         /// <returns></returns>
-        public bool TryGetStateForCallsign(string callsign, out ReceptionReportState? receptionReportState)
+        public bool TryGetReceptionReportState(string callsign, out ReceptionReportState? receptionReportState)
         {
             if (_receptionReports.ContainsKey(callsign))
             {
@@ -77,27 +79,43 @@ namespace WsjtxUtils.Searchlight.Common
         /// Gather reception reports for all monitored callsigns
         /// </summary>
         /// <returns></returns>
-        public async Task GatherReceptionReportsAsync(CancellationToken cancellationToken = default)
+        public async Task PeriodicallyGatherReceptionReportsAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var callsign in _receptionReports.Keys)
-            {
-                // check if a new report need to be queried
-                if (!ShouldQueryReport(callsign, _receptionReports[callsign]))
-                    continue;
-
-                try
+            using (var timer = new PeriodicTimer(TimeSpan.FromSeconds(1)))
+                while (await timer.WaitForNextTickAsync(cancellationToken))
                 {
-                    await GatherReceptionReportsForCallsignAsync(callsign, cancellationToken);
-                }
-                catch (HttpRequestException htttpRequestException)
-                {
-                    if (htttpRequestException.StatusCode != HttpStatusCode.ServiceUnavailable && _receptionReports[callsign].Retry > MaxRetries)
-                        throw;
+                    foreach (var callsign in _receptionReports.Keys)
+                    {
+                        var receptionReportsForCallsignState = _receptionReports[callsign];
 
-                    Log.Warning("Report for {callsign} failed with {code} {message}, retry {retry}", callsign, htttpRequestException.StatusCode, htttpRequestException.Message, _receptionReports[callsign].Retry);
-                    _receptionReports[callsign].Retry++;
+                        // check if a new report needs to be queried
+                        if (!ShouldQueryReport(callsign, receptionReportsForCallsignState) || _reportRequestSemaphore.CurrentCount < 1)
+                            continue;
+
+                        await _reportRequestSemaphore.WaitAsync();
+                        try
+                        {
+                            await GatherReceptionReportsForCallsignAsync(callsign, cancellationToken);
+                        }
+                        catch (HttpRequestException htttpRequestException)
+                        {
+                            Log.Warning("Report for {callsign} failed with {code} {message}, retry {retry}", callsign, htttpRequestException.StatusCode, htttpRequestException.Message, receptionReportsForCallsignState.Retry);
+
+                            if (htttpRequestException.StatusCode != HttpStatusCode.ServiceUnavailable && receptionReportsForCallsignState.Retry > MaxRetries)
+                                throw;
+
+                            receptionReportsForCallsignState.RetryWithExponentialBackoff(ExponentialBackoffSeconds);
+                        }
+                        catch(Exception exception)
+                        {
+                            Log.Error(exception, "An error ocurred.");
+                        }
+                        finally
+                        {
+                            _reportRequestSemaphore.Release();
+                        }
+                    }
                 }
-            }
         }
 
         /// <summary>
@@ -108,8 +126,7 @@ namespace WsjtxUtils.Searchlight.Common
         private bool ShouldQueryReport(string callsign, ReceptionReportState state)
         {
             var secondsElasped = (DateTime.UtcNow - state.ReportTimestamp).TotalSeconds;
-            var backoffInSeconds = (state.Retry > 0) ? ExponentialBackoffSeconds * Math.Pow(2, state.Retry + Random.Shared.NextDouble()) : 0;
-            var intervalInSeconds = _pskReporterSettings.ReportRetrievalPeriodSeconds + backoffInSeconds;
+            var intervalInSeconds = _pskReporterSettings.ReportRetrievalPeriodSeconds + state.Backoff;
 
             if (secondsElasped > intervalInSeconds)
             {
@@ -117,7 +134,7 @@ namespace WsjtxUtils.Searchlight.Common
                 return true;
             }
 
-            Log.Information("Reception report update for {callsign} in {seconds} seconds", callsign, Convert.ToInt32(intervalInSeconds - secondsElasped));
+            Log.Verbose("Reception report update for {callsign} in {seconds} seconds", callsign, Convert.ToInt32(intervalInSeconds - secondsElasped));
             return false;
         }
 
@@ -156,6 +173,7 @@ namespace WsjtxUtils.Searchlight.Common
                     reportState.ReceptionReports = report;
                     reportState.ReportTimestamp = DateTime.UtcNow;
                     reportState.Retry = 0;
+                    reportState.Backoff = 0;
                     reportState.IsDirty = true;
                     return reportState;
                 });

@@ -11,7 +11,7 @@ namespace WsjtxUtils.Searchlight.Common.Settings
         /// <summary>
         /// Searchlight color settings
         /// </summary>
-        public ColorSettings() : this(new List<Color>(), Color.Empty, Color.Empty, Color.Empty)
+        public ColorSettings() : this(new List<Color>(), Color.Empty, Color.Empty, Color.Empty, 5)
         {
         }
 
@@ -22,12 +22,13 @@ namespace WsjtxUtils.Searchlight.Common.Settings
         /// <param name="receptionReportForegroundColor"></param>
         /// <param name="contactedBackgroundColor"></param>
         /// <param name="contactedForegroundColor"></param>
-        public ColorSettings(List<Color> receptionReportBackgroundColors, Color receptionReportForegroundColor, Color contactedBackgroundColor, Color contactedForegroundColor)
+        public ColorSettings(List<Color> receptionReportBackgroundColors, Color receptionReportForegroundColor, Color contactedBackgroundColor, Color contactedForegroundColor, int updateHighlightedCallsignsSeconds = 5)
         {
             ReceptionReportBackgroundColors = receptionReportBackgroundColors;
             ReceptionReportForegroundColor = receptionReportForegroundColor;
             ContactedBackgroundColor = contactedBackgroundColor;
             ContactedForegroundColor = contactedForegroundColor;
+            HighlightCallsignsPeriodSeconds = updateHighlightedCallsignsSeconds;
         }
 
         /// <summary>
@@ -53,5 +54,10 @@ namespace WsjtxUtils.Searchlight.Common.Settings
         /// </summary>
         [JsonConverter(typeof(HexadecimalColorJsonConverter))]
         public Color ContactedForegroundColor { get; set; }
+
+        /// <summary>
+        /// The period to update highlighted callsigns in seconds
+        /// </summary>
+        public int HighlightCallsignsPeriodSeconds { get; set; }
     }
 }

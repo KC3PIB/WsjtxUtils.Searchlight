@@ -22,11 +22,10 @@ namespace WsjtxUtils.Searchlight.Common.PskReporter
             Log.Debug("HTTP Get {url}.", url);
 
             var response = await httpClient.GetAsync(url, cancellationToken);
-            Log.Debug("Request complete: {url} {code} {headers}", url, response.StatusCode, response.Headers);
+            Log.Debug("Request complete: {url} {code}", url, response.StatusCode);
 
             response.EnsureSuccessStatusCode();
 
-            Log.Debug("Deserialize reception reports");
             var serializer = new XmlSerializer(typeof(PskReceptionReports));
             using var reader = new XmlTextReader(await response.Content.ReadAsStreamAsync(cancellationToken));
             return (PskReceptionReports?)serializer.Deserialize(reader);
@@ -46,11 +45,7 @@ namespace WsjtxUtils.Searchlight.Common.PskReporter
             if (handler.SupportsAutomaticDecompression)
                 handler.AutomaticDecompression = DecompressionMethods.All;
 
-            var client = new HttpClient(handler);
-
-            //client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("searchlight","0.1"));
-
-            return client;
+            return new HttpClient(handler);
         }
     }
 }

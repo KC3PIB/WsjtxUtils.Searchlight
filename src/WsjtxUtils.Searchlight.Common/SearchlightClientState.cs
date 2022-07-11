@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
-using WsjtxUtils.Searchlight.Common.Wsjtx;
 using WsjtxUtils.WsjtxMessages.Messages;
+using WsjtxUtils.WsjtxMessages.QsoParsing;
 
 namespace WsjtxUtils.Searchlight.Common
 {
@@ -9,16 +9,34 @@ namespace WsjtxUtils.Searchlight.Common
     /// </summary>
     public class SearchlightClientState
     {
-        public SearchlightClientState(Status? status) : this(status, new ConcurrentDictionary<string, WsjtxQso>(), new ConcurrentDictionary<string, HighlightCallsign>())
+        /// <summary>
+        /// Construct a searchlight client state
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        public SearchlightClientState(string id, Status? status = null) : this(id, status, new ConcurrentDictionary<string, WsjtxQso>(), new ConcurrentDictionary<string, HighlightCallsign>())
         {
         }
 
-        public SearchlightClientState(Status? status, ConcurrentDictionary<string, WsjtxQso> decodedStations, ConcurrentDictionary<string, HighlightCallsign> highlightedCallsigns)
+        /// <summary>
+        /// Construct a searchlight client state
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <param name="decodedStations"></param>
+        /// <param name="highlightedCallsigns"></param>
+        public SearchlightClientState(string id, Status? status, ConcurrentDictionary<string, WsjtxQso> decodedStations, ConcurrentDictionary<string, HighlightCallsign> highlightedCallsigns)
         {
+            Id = id;
             Status = status;
             DecodedStations = decodedStations;
             HighlightedCallsigns = highlightedCallsigns;
         }
+
+        /// <summary>
+        /// WSJT-X client id
+        /// </summary>
+        public string Id { get; set; }
 
         /// <summary>
         /// Status for the client
@@ -57,11 +75,14 @@ namespace WsjtxUtils.Searchlight.Common
         /// <summary>
         /// Add a station that was decoded to the list
         /// </summary>
-        /// <param name="HighlightCallsign"></param>
+        /// <param name="decode"></param>
         /// <param name="expiryInSeconds"></param>
-        public void AddDecodedStation(Decode HighlightCallsign, int expiryInSeconds = 1800)
+        public void AddDecodedStation(Decode decode, int expiryInSeconds = 1800)
         {
-            var qso = WsjtxQsoParser.ParseDecode(HighlightCallsign);
+            if (Status == null || Status.Mode == string.Empty)
+                return;
+
+            var qso = WsjtxQsoParser.ParseDecode(Status.Mode, decode);
 
             DecodedStations.AddOrUpdate(qso.DECallsign, (deCallsign) =>
             {

@@ -3,7 +3,7 @@
 namespace WsjtxUtils.Searchlight.Common
 {
     /// <summary>
-    /// Recpetion report state
+    /// Reception report state
     /// </summary>
     public class ReceptionReportState
     {
@@ -59,8 +59,23 @@ namespace WsjtxUtils.Searchlight.Common
         public int Retry { get; set; }
 
         /// <summary>
+        /// Time in seconds for exponential backoff
+        /// </summary>
+        public double Backoff { get; set; }
+
+        /// <summary>
         /// Has the report been updated before a refresh?
         /// </summary>
         public bool IsDirty { get; set; }
+
+        /// <summary>
+        /// Handle exponential backoff on retry
+        /// </summary>
+        /// <param name="seconds"></param>
+        public void RetryWithExponentialBackoff(double seconds = 30)
+        {
+            Retry++;
+            Backoff = seconds * Math.Pow(2, Retry + Random.Shared.NextDouble()); // simple backoff with jitter
+        }
     }
 }

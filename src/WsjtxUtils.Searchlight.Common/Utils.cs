@@ -1,5 +1,6 @@
 ﻿using WsjtxUtils.Searchlight.Common.PskReporter;
 using WsjtxUtils.WsjtxMessages.Messages;
+using WsjtxUtils.WsjtxMessages.QsoParsing;
 using WsjtxUtils.WsjtxUdpServer;
 
 namespace WsjtxUtils.Searchlight.Common
@@ -75,6 +76,17 @@ namespace WsjtxUtils.Searchlight.Common
         }
 
         /// <summary>
+        /// Where logged qso band is
+        /// </summary>
+        /// <param name="enumerable"></param>
+        /// <param name="band"></param>
+        /// <returns></returns>
+        public static IEnumerable<QsoLogged> WhereBand(this IEnumerable<QsoLogged> enumerable, ulong band)
+        {
+            return enumerable.Where(qso => Utils.ApproximateBandFromFrequency(qso.TXFrequencyInHz) == band);
+        }
+
+        /// <summary>
         /// Where reception report mode
         /// </summary>
         /// <param name="enumerable"></param>
@@ -101,9 +113,20 @@ namespace WsjtxUtils.Searchlight.Common
         /// <param name="enumerable"></param>
         /// <param name="previousQsos"></param>
         /// <returns></returns>
-        public static IEnumerable<KeyValuePair<string, Wsjtx.WsjtxQso>> WhereNotPreviouslyContacted(this IEnumerable<KeyValuePair<string, Wsjtx.WsjtxQso>> enumerable, IEnumerable<QsoLogged> previousQsos)
+        public static IEnumerable<KeyValuePair<string, WsjtxQso>> WhereNotPreviouslyContacted(this IEnumerable<KeyValuePair<string, WsjtxQso>> enumerable, IEnumerable<QsoLogged> previousQsos)
         {
             return enumerable.Where(kvp => !previousQsos.Any(logged => kvp.Key == logged.DXCall));
+        }
+
+        /// <summary>
+        /// Where previously contacted
+        /// </summary>
+        /// <param name="enumerable"></param>
+        /// <param name="previousQsos"></param>
+        /// <returns></returns>
+        public static IEnumerable<KeyValuePair<string, WsjtxQso>> WherePreviouslyContacted(this IEnumerable<KeyValuePair<string, WsjtxQso>> enumerable, IEnumerable<QsoLogged> previousQsos)
+        {
+            return enumerable.Where(kvp => previousQsos.Any(logged => kvp.Key == logged.DXCall));
         }
 
         /// <summary>
@@ -112,9 +135,31 @@ namespace WsjtxUtils.Searchlight.Common
         /// <param name="enumerable"></param>
         /// <param name="highlightedCalls"></param>
         /// <returns></returns>
-        public static IEnumerable<KeyValuePair<string, Wsjtx.WsjtxQso>> WhereNotPreviouslyHiglighted(this IEnumerable<KeyValuePair<string, Wsjtx.WsjtxQso>> enumerable, IEnumerable<string> highlightedCalls)
+        public static IEnumerable<KeyValuePair<string, WsjtxQso>> WhereNotPreviouslyHiglighted(this IEnumerable<KeyValuePair<string, WsjtxQso>> enumerable, IEnumerable<string> highlightedCalls)
         {
             return enumerable.Where(kvp => !highlightedCalls.Any(call => call == kvp.Value.DECallsign));
+        }
+
+        /// <summary>
+        /// Where not previously highlighted
+        /// </summary>
+        /// <param name="enumerable"></param>
+        /// <param name="clientState"></param>
+        /// <returns></returns>
+        public static IEnumerable<KeyValuePair<string, WsjtxQso>> WhereNotPreviouslyHiglighted(this IEnumerable<KeyValuePair<string, WsjtxQso>> enumerable, SearchlightClientState clientState)
+        {
+            return enumerable.WhereNotPreviouslyHiglighted(clientState.HighlightedCallsigns.Keys);
+        }
+
+        /// <summary>
+        /// Where not previously highlighted
+        /// </summary>
+        /// <param name="enumerable"></param>
+        /// <param name="highlightedCalls"></param>
+        /// <returns></returns>
+        public static IEnumerable<QsoLogged> WhereNotPreviouslyHiglighted(this IEnumerable<QsoLogged> enumerable, IEnumerable<string> highlightedCalls)
+        {
+            return enumerable.Where(qso => !highlightedCalls.Any(call => call == qso.DXCall));
         }
     }
 }
