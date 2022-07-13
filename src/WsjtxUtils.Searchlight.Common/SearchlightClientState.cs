@@ -79,10 +79,7 @@ namespace WsjtxUtils.Searchlight.Common
         /// <param name="expiryInSeconds"></param>
         public void AddDecodedStation(Decode decode, int expiryInSeconds = 1800)
         {
-            if (Status == null || Status.Mode == string.Empty)
-                return;
-
-            var qso = WsjtxQsoParser.ParseDecode(Status.Mode, decode);
+            var qso = WsjtxQsoParser.ParseDecode(decode);
 
             DecodedStations.AddOrUpdate(qso.DECallsign, (deCallsign) =>
             {
