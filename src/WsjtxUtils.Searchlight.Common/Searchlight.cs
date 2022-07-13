@@ -108,7 +108,7 @@ namespace WsjtxUtils.Searchlight.Common
             await base.HandleQsoLoggedMessageAsync(server, message, endPoint, cancellationToken);
 
             // log the QSO
-            await _loggedQsos.WriteQsoToLogFileAsync(message);
+            await _loggedQsos.LogQsoAsync(message);
 
             // send highlight message for the DX callsign
             await HighlightCallsignAsync(message.Id, message.DXCall, _settings.Palette.ContactedBackgroundColor, _settings.Palette.ContactedForegroundColor);

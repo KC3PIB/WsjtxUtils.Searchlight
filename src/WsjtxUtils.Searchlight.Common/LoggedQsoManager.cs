@@ -91,12 +91,12 @@ namespace WsjtxUtils.Searchlight.Common
         }
 
         /// <summary>
-        /// Log a <see cref="QsoLogged"/> message to the log file
+        /// Log a <see cref="QsoLogged"/> message
         /// </summary>
         /// <param name="qsoLogged"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task WriteQsoToLogFileAsync(QsoLogged qsoLogged, CancellationToken cancellationToken = default)
+        public async Task LogQsoAsync(QsoLogged qsoLogged, CancellationToken cancellationToken = default)
         {
             // log the message to the local cache
             QsosLoggedForBand(qsoLogged.TXFrequencyInHz).Add(qsoLogged);
