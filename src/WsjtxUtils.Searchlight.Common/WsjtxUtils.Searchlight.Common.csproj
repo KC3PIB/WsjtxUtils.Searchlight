@@ -9,8 +9,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
-    <PackageReference Include="WsjtxUtils.WsjtxMessages" Version="1.0.0.59" />
-    <PackageReference Include="WsjtxUtils.WsjtxUdpServer" Version="1.0.0.59" />
+    <PackageReference Include="WsjtxUtils.WsjtxMessages" Version="1.0.0.60" />
+    <PackageReference Include="WsjtxUtils.WsjtxUdpServer" Version="1.0.0.60" />
   </ItemGroup>
 
 </Project>
